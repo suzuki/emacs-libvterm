@@ -520,9 +520,11 @@ static void adjust_topline(Term *term, emacs_env *env) {
 
   /* pos.row-term->height is negative, so we backward term->height-pos.row
    * lines from end of buffer
+   * We also need to account for newly added lines (term->linenum_added)
+   * to prevent jumping to the beginning when buffer grows.
    */
 
-  goto_line(env, pos.row - term->height);
+  goto_line(env, pos.row - term->height - term->linenum_added);
   goto_col(term, env, pos.row, pos.col);
 
   emacs_value windows = get_buffer_window_list(env);
